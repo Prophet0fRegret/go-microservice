@@ -42,3 +42,17 @@ func (c *Client) GetAllServices(ctx context.Context, serviceID string) ([]models
 
 	return services, nil
 }
+
+func (c *Client) CreateNewService(ctx context.Context, service *models.Service) error {
+	servicesCollection := c.DB.Database("mcr-db").Collection("services")
+
+	result, err := servicesCollection.InsertOne(ctx, service)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to insert service record into Mongo......")
+		return err
+	}
+
+	logrus.WithField("RecordID", result.InsertedID).Info("New service record inserted successfully into Mongo......")
+
+	return err
+}

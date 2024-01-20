@@ -42,3 +42,17 @@ func (c *Client) GetAllProducts(ctx context.Context, vendorID string) ([]models.
 
 	return products, nil
 }
+
+func (c *Client) CreateNewProduct(ctx context.Context, product *models.Product) error {
+	productsCollection := c.DB.Database("mcr-db").Collection("products")
+
+	result, err := productsCollection.InsertOne(ctx, product)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to insert product record into Mongo......")
+		return err
+	}
+
+	logrus.WithField("RecordID", result.InsertedID).Info("New product record inserted successfully into Mongo......")
+
+	return err
+}

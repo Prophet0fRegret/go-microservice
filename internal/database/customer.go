@@ -42,3 +42,17 @@ func (c *Client) GetAllCustomers(ctx context.Context, emailAddress string) ([]mo
 
 	return customers, nil
 }
+
+func (c *Client) CreateNewCustomer(ctx context.Context, customer *models.Customer) error {
+	customersCollection := c.DB.Database("mcr-db").Collection("customers")
+
+	result, err := customersCollection.InsertOne(ctx, customer)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to insert customer record into Mongo......")
+		return err
+	}
+
+	logrus.WithField("RecordID", result.InsertedID).Info("New customer record inserted successfully into Mongo......")
+
+	return err
+}

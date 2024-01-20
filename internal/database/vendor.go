@@ -42,3 +42,17 @@ func (c *Client) GetAllVendors(ctx context.Context, vendorID string) ([]models.V
 
 	return vendors, nil
 }
+
+func (c *Client) CreateNewVendor(ctx context.Context, vendor *models.Vendor) error {
+	vendorsCollection := c.DB.Database("mcr-db").Collection("vendors")
+
+	result, err := vendorsCollection.InsertOne(ctx, vendor)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to insert vendor record into Mongo......")
+		return err
+	}
+
+	logrus.WithField("RecordID", result.InsertedID).Info("New vendor record inserted successfully into Mongo......")
+
+	return err
+}
