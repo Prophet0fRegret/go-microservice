@@ -40,3 +40,18 @@ func (e *EchoServer) CreateNewVendor(ctx echo.Context) error {
 
 	return ctx.String(http.StatusOK, fmt.Sprintf("Record created in database successfully, ID : %s", vendor.VendorID))
 }
+
+func (e *EchoServer) UpdateVendor(ctx echo.Context) error {
+	var vendor models.Vendor
+
+	if err := ctx.Bind(&vendor); err != nil {
+		return ctx.String(http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request body into Vendor model with error : %s", err.Error()))
+	}
+
+	err := e.DB.CreateNewVendor(ctx.Request().Context(), &vendor)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, fmt.Sprintf("Unable to update vendor record in database, error : %s", err.Error()))
+	}
+
+	return ctx.String(http.StatusOK, fmt.Sprintf("Record update in database successfully, ID : %s", vendor.VendorID))
+}

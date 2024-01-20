@@ -56,3 +56,33 @@ func (c *Client) CreateNewCustomer(ctx context.Context, customer *models.Custome
 
 	return err
 }
+
+func (c *Client) UpdateCustomer(ctx context.Context, customer *models.Customer) error {
+	customersCollection := c.DB.Database("mcr-db").Collection("customers")
+
+	filter := bson.M{
+		"customer_id": customer.CustomerID,
+	}
+	updateFields := bson.M{
+		"$set": bson.M{
+			"first_name": customer.FirstName,
+			"last_name":  customer.LastName,
+			"email":      customer.EmailID,
+			"phone":      customer.Phone,
+			"address":    customer.Address,
+		},
+	}
+
+	result, err := customersCollection.UpdateOne(ctx, filter, updateFields)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to update customer record in Mongo......")
+		return err
+	}
+
+	logrus.WithFields(logrus.Fields{
+		"Matched Count":  result.MatchedCount,
+		"Upserted Count": result.UpsertedCount,
+	}).Info("Customer record updated successfully in Mongo.....")
+
+	return err
+}

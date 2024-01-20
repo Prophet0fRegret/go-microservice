@@ -40,3 +40,18 @@ func (e *EchoServer) CreateNewService(ctx echo.Context) error {
 
 	return ctx.String(http.StatusOK, fmt.Sprintf("Record created in database successfully, ID : %s", service.ServiceID))
 }
+
+func (e *EchoServer) UpdateService(ctx echo.Context) error {
+	var service models.Service
+
+	if err := ctx.Bind(&service); err != nil {
+		return ctx.String(http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request body into Service model with error : %s", err.Error()))
+	}
+
+	err := e.DB.UpdateService(ctx.Request().Context(), &service)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, fmt.Sprintf("Unable to update service record in database, error : %s", err.Error()))
+	}
+
+	return ctx.String(http.StatusOK, fmt.Sprintf("Record update in database successfully, ID : %s", service.ServiceID))
+}

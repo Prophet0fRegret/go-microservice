@@ -56,3 +56,30 @@ func (c *Client) CreateNewService(ctx context.Context, service *models.Service) 
 
 	return err
 }
+
+func (c *Client) UpdateService(ctx context.Context, service *models.Service) error {
+	serviceCollection := c.DB.Database("mcr-db").Collection("services")
+
+	filter := bson.M{
+		"service_id": service.ServiceID,
+	}
+	updateFields := bson.M{
+		"$set": bson.M{
+			"name":  service.ServiceName,
+			"price": service.Price,
+		},
+	}
+
+	result, err := serviceCollection.UpdateOne(ctx, filter, updateFields)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to update service record in Mongo......")
+		return err
+	}
+
+	logrus.WithFields(logrus.Fields{
+		"Matched Count":  result.MatchedCount,
+		"Upserted Count": result.UpsertedCount,
+	}).Info("Service record updated successfully in Mongo.....")
+
+	return err
+}

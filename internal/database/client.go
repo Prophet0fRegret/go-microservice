@@ -22,18 +22,22 @@ type DatabaseClient interface {
 	//Customers
 	GetAllCustomers(context.Context, string) ([]models.Customer, error)
 	CreateNewCustomer(context.Context, *models.Customer) error
+	UpdateCustomer(context.Context, *models.Customer) error
 
 	//Products
 	GetAllProducts(context.Context, string) ([]models.Product, error)
 	CreateNewProduct(context.Context, *models.Product) error
+	UpdateProduct(context.Context, *models.Product) error
 
 	//Services
 	GetAllServices(context.Context, string) ([]models.Service, error)
 	CreateNewService(context.Context, *models.Service) error
+	UpdateService(context.Context, *models.Service) error
 
 	//Vendors
 	GetAllVendors(context.Context, string) ([]models.Vendor, error)
 	CreateNewVendor(context.Context, *models.Vendor) error
+	UpdateVendor(context.Context, *models.Vendor) error
 }
 
 type Client struct {

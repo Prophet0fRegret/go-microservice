@@ -40,3 +40,18 @@ func (e *EchoServer) CreateNewCustomer(ctx echo.Context) error {
 
 	return ctx.String(http.StatusOK, fmt.Sprintf("Record created in database successfully, ID : %s", customer.CustomerID))
 }
+
+func (e *EchoServer) UpdateCustomer(ctx echo.Context) error {
+	var customer models.Customer
+
+	if err := ctx.Bind(&customer); err != nil {
+		return ctx.String(http.StatusBadRequest, fmt.Sprintf("Unable to unmarshal request body into Customer model with error : %s", err.Error()))
+	}
+
+	err := e.DB.UpdateCustomer(ctx.Request().Context(), &customer)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, fmt.Sprintf("Unable to update customer record in database, error : %s", err.Error()))
+	}
+
+	return ctx.String(http.StatusOK, fmt.Sprintf("Record updated in database successfully, ID : %s", customer.CustomerID))
+}

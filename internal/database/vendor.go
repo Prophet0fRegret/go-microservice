@@ -56,3 +56,33 @@ func (c *Client) CreateNewVendor(ctx context.Context, vendor *models.Vendor) err
 
 	return err
 }
+
+func (c *Client) UpdateVendor(ctx context.Context, vendor *models.Vendor) error {
+	vendorCollection := c.DB.Database("mcr-db").Collection("vendors")
+
+	filter := bson.M{
+		"vendor_id": vendor.VendorID,
+	}
+	updateFields := bson.M{
+		"$set": bson.M{
+			"name":    vendor.Name,
+			"contact": vendor.Contact,
+			"email":   vendor.EmailID,
+			"phone":   vendor.Phone,
+			"address": vendor.Address,
+		},
+	}
+
+	result, err := vendorCollection.UpdateOne(ctx, filter, updateFields)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to update vendor record in Mongo......")
+		return err
+	}
+
+	logrus.WithFields(logrus.Fields{
+		"Matched Count":  result.MatchedCount,
+		"Upserted Count": result.UpsertedCount,
+	}).Info("Vendor record updated successfully in Mongo.....")
+
+	return err
+}
