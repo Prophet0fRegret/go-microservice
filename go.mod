@@ -3,7 +3,6 @@ module github.com/prophet0fregret/go-microservice
 go 1.18
 
 require (
-	github.com/google/uuid v1.5.0
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/sirupsen/logrus v1.9.3
 	go.mongodb.org/mongo-driver v1.13.1

@@ -15,3 +15,18 @@ type Product struct {
 	Price       float64 `json:"price" bson:"price"`
 	VendorID    string  `json:"vendor_id" bson:"vendor_id"`
 }
+
+type Service struct {
+	ServiceID   string  `json:"service_id" bson:"service_id"`
+	ServiceName string  `json:"service_name" bson:"name"`
+	Price       float64 `json:"price" bson:"price"`
+}
+
+type Vendor struct {
+	VendorID string `json:"vendor_id" bson:"vendor_id"`
+	Name     string `json:"name" bson:"name"`
+	Contact  string `json:"contact" bson:"contact"`
+	Phone    string `json:"phone" bson:"phone"`
+	EmailID  string `json:"email" bson:"email"`
+	Address  string `json:"address" bson:"address"`
+}

@@ -7,13 +7,13 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func (e *EchoServer) GetAllProducts(ctx echo.Context) error {
+func (e *EchoServer) GetAllVendors(ctx echo.Context) error {
 	vendorID := ctx.QueryParam("vendor_id")
 	logrus.Info("VendorID Path Param - ", vendorID)
 
-	models, err := e.DB.GetAllProducts(ctx.Request().Context(), vendorID)
+	models, err := e.DB.GetAllVendors(ctx.Request().Context(), vendorID)
 	if err != nil {
-		logrus.WithError(err).Error("Unable to fetch any products from database...")
+		logrus.WithError(err).Error("Unable to fetch any vendors from database...")
 		ctx.NoContent(http.StatusInternalServerError)
 		return err
 	}

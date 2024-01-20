@@ -20,6 +20,8 @@ type DatabaseClient interface {
 	Ready() bool
 	GetAllCustomers(context.Context, string) ([]models.Customer, error)
 	GetAllProducts(context.Context, string) ([]models.Product, error)
+	GetAllServices(context.Context, string) ([]models.Service, error)
+	GetAllVendors(context.Context, string) ([]models.Vendor, error)
 }
 
 type Client struct {
