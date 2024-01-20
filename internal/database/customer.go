@@ -86,3 +86,23 @@ func (c *Client) UpdateCustomer(ctx context.Context, customer *models.Customer) 
 
 	return err
 }
+
+func (c *Client) DeleteCustomer(ctx context.Context, customerID string) error {
+	customersCollection := c.DB.Database("mcr-db").Collection("customers")
+
+	filter := bson.M{
+		"customer_id": customerID,
+	}
+
+	result, err := customersCollection.DeleteOne(ctx, filter)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to delete customer record in Mongo......")
+		return err
+	}
+
+	logrus.WithFields(logrus.Fields{
+		"Deleted Count": result.DeletedCount,
+	}).Info("Customer record deleted successfully from Mongo.....")
+
+	return err
+}

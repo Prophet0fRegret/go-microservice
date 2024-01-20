@@ -55,3 +55,22 @@ func (e *EchoServer) UpdateService(ctx echo.Context) error {
 
 	return ctx.String(http.StatusOK, fmt.Sprintf("Record update in database successfully, ID : %s", service.ServiceID))
 }
+
+func (e *EchoServer) DeleteService(ctx echo.Context) error {
+	var serviceID = ctx.Param("service_id")
+
+	if err := uuid.Validate(serviceID); err != nil {
+		logrus.WithFields(logrus.Fields{
+			"ServiceID": serviceID,
+			"Error":     err,
+		}).Error("Invalid service ID provided in params....")
+		return ctx.String(http.StatusBadRequest, "Invalid service ID provided in params....")
+	}
+
+	err := e.DB.DeleteService(ctx.Request().Context(), serviceID)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, fmt.Sprintf("Unable to delete service record in database, error : %s", err.Error()))
+	}
+
+	return ctx.String(http.StatusOK, fmt.Sprintf("Record deleted from database successfully, ID : %s", serviceID))
+}

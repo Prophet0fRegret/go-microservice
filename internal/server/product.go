@@ -55,3 +55,22 @@ func (e *EchoServer) UpdateProduct(ctx echo.Context) error {
 
 	return ctx.String(http.StatusOK, fmt.Sprintf("Record updated in database successfully, ID : %s", product.ProductID))
 }
+
+func (e *EchoServer) DeleteProduct(ctx echo.Context) error {
+	var productID = ctx.Param("product_id")
+
+	if err := uuid.Validate(productID); err != nil {
+		logrus.WithFields(logrus.Fields{
+			"ProductID": productID,
+			"Error":     err,
+		}).Error("Invalid product ID provided in params....")
+		return ctx.String(http.StatusBadRequest, "Invalid product ID provided in params....")
+	}
+
+	err := e.DB.DeleteProduct(ctx.Request().Context(), productID)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, fmt.Sprintf("Unable to delete product record in database, error : %s", err.Error()))
+	}
+
+	return ctx.String(http.StatusOK, fmt.Sprintf("Record deleted from database successfully, ID : %s", productID))
+}

@@ -55,3 +55,22 @@ func (e *EchoServer) UpdateVendor(ctx echo.Context) error {
 
 	return ctx.String(http.StatusOK, fmt.Sprintf("Record update in database successfully, ID : %s", vendor.VendorID))
 }
+
+func (e *EchoServer) DeleteVendor(ctx echo.Context) error {
+	var vendorID = ctx.Param("vendor_id")
+
+	if err := uuid.Validate(vendorID); err != nil {
+		logrus.WithFields(logrus.Fields{
+			"VendorID": vendorID,
+			"Error":    err,
+		}).Error("Invalid vendor ID provided in params....")
+		return ctx.String(http.StatusBadRequest, "Invalid vendor ID provided in params....")
+	}
+
+	err := e.DB.DeleteVendor(ctx.Request().Context(), vendorID)
+	if err != nil {
+		return ctx.String(http.StatusBadRequest, fmt.Sprintf("Unable to delete vendor record in database, error : %s", err.Error()))
+	}
+
+	return ctx.String(http.StatusOK, fmt.Sprintf("Record deleted from database successfully, ID : %s", vendorID))
+}

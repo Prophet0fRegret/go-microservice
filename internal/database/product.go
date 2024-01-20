@@ -84,3 +84,23 @@ func (c *Client) UpdateProduct(ctx context.Context, product *models.Product) err
 
 	return err
 }
+
+func (c *Client) DeleteProduct(ctx context.Context, productID string) error {
+	productCollection := c.DB.Database("mcr-db").Collection("products")
+
+	filter := bson.M{
+		"product_id": productID,
+	}
+
+	result, err := productCollection.DeleteOne(ctx, filter)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to delete product record in Mongo......")
+		return err
+	}
+
+	logrus.WithFields(logrus.Fields{
+		"Deleted Count": result.DeletedCount,
+	}).Info("Product record deleted successfully from Mongo.....")
+
+	return err
+}

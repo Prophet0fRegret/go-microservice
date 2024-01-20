@@ -50,24 +50,28 @@ func (s *EchoServer) registerRoutes() {
 	customerGroup.GET("/all-customers", s.GetAllCustomers)
 	customerGroup.PUT("/create-customer", s.CreateNewCustomer)
 	customerGroup.PATCH("/update-customer", s.UpdateCustomer)
+	customerGroup.DELETE("/delete-customer/:customer_id", s.DeleteCustomer)
 
 	//Products
 	productGroup := s.echo.Group("/products")
 	productGroup.GET("/all-products", s.GetAllProducts)
 	productGroup.PUT("/create-product", s.CreateNewProduct)
 	productGroup.PATCH("/update-product", s.UpdateProduct)
+	productGroup.DELETE("/delete-product/:product_id", s.DeleteProduct)
 
 	//Services
 	serviceGroup := s.echo.Group("/services")
 	serviceGroup.GET("/all-services", s.GetAllServices)
 	serviceGroup.PUT("/create-service", s.CreateNewService)
 	serviceGroup.PATCH("/update-service", s.UpdateService)
+	serviceGroup.DELETE("/delete-service/:service_id", s.DeleteService)
 
 	//Vendors
 	vendorsGroup := s.echo.Group("/vendors")
 	vendorsGroup.GET("/all-vendors", s.GetAllVendors)
 	vendorsGroup.PUT("/create-vendor", s.CreateNewVendor)
 	vendorsGroup.PATCH("/update-vendor", s.UpdateVendor)
+	vendorsGroup.DELETE("/delete-vendor/:vendor_id", s.DeleteVendor)
 }
 
 func (s *EchoServer) Readiness(ctx echo.Context) error {

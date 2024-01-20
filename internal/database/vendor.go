@@ -86,3 +86,23 @@ func (c *Client) UpdateVendor(ctx context.Context, vendor *models.Vendor) error 
 
 	return err
 }
+
+func (c *Client) DeleteVendor(ctx context.Context, vendorID string) error {
+	vendorCollection := c.DB.Database("mcr-db").Collection("vendors")
+
+	filter := bson.M{
+		"vendor_id": vendorID,
+	}
+
+	result, err := vendorCollection.DeleteOne(ctx, filter)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to delete vendor record in Mongo......")
+		return err
+	}
+
+	logrus.WithFields(logrus.Fields{
+		"Deleted Count": result.DeletedCount,
+	}).Info("Vendor record deleted successfully from Mongo.....")
+
+	return err
+}

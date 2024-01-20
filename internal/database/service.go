@@ -83,3 +83,23 @@ func (c *Client) UpdateService(ctx context.Context, service *models.Service) err
 
 	return err
 }
+
+func (c *Client) DeleteService(ctx context.Context, serviceID string) error {
+	serviceCollection := c.DB.Database("mcr-db").Collection("services")
+
+	filter := bson.M{
+		"service_id": serviceID,
+	}
+
+	result, err := serviceCollection.DeleteOne(ctx, filter)
+	if err != nil {
+		logrus.WithError(err).Error("Unable to delete service record in Mongo......")
+		return err
+	}
+
+	logrus.WithFields(logrus.Fields{
+		"Deleted Count": result.DeletedCount,
+	}).Info("Service record deleted successfully from Mongo.....")
+
+	return err
+}
