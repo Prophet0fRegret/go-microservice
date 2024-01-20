@@ -19,6 +19,7 @@ var initOnce sync.Once
 type DatabaseClient interface {
 	Ready() bool
 	GetAllCustomers(context.Context, string) ([]models.Customer, error)
+	GetAllProducts(context.Context, string) ([]models.Product, error)
 }
 
 type Client struct {
