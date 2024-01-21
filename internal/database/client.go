@@ -67,7 +67,7 @@ func ReturnDatabaseClient() (DatabaseClient, error) {
 func NewMongoClient() (DatabaseClient, error) {
 	logrus.Info("Initializing new Mongo client.... attempting to connect to Mongo instance")
 
-	connectionString := fmt.Sprintf("mongodb://%s:%s@localhost:27017/", "admin", "password")
+	connectionString := fmt.Sprintf("mongodb://%s:%s@mongodb:27017/", "admin", "password")
 	logrus.Infof("Mongo connection URI - %s", connectionString)
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
